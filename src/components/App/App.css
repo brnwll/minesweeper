@@ -1,0 +1,15 @@
+/*
+#7c887e, #91967f, #bab79f, #d3d2cd, #a08d83 and #726870. 
+*/
+
+#App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+}
