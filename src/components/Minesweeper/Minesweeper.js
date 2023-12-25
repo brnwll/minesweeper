@@ -1,9 +1,10 @@
+import Header from "../Header/Header";
 import "./Minesweeper.css";
 
 function App() {
   return (
     <div id="Minesweeper">
-      <header>This is the header</header>
+      <Header />
       <main>This is where gameplay occurs</main>
       <footer>This is the footer</footer>
     </div>

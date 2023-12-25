@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import Minesweeper from "./component/Minesweeper/Minesweeper";
+import Minesweeper from "./components/Minesweeper/Minesweeper";
 import reportWebVitals from "./reportWebVitals";
+
+// Fonts
+import "./assets/fonts/KarmaticArcade.ttf";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
