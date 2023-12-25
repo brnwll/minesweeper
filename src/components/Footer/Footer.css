@@ -1,5 +1,8 @@
 footer {
-  background-color: #726870;
+  background-color: var(--footer-background-color);
   padding: 1rem;
   width: 100vw;
+  font-family: "Pixel", sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
 }

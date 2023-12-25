@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 
 // Fonts
 import "./assets/fonts/KarmaticArcade.ttf";
+import "./assets/fonts/Pixel.ttf";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

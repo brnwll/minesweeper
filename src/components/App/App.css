@@ -1,6 +1,19 @@
-/*
-#7c887e, #91967f, #bab79f, #d3d2cd, #a08d83 and #726870. 
-*/
+:root {
+  --gray: #7c887e;
+  --artichoke: #91967f;
+  --laurelGreen: #bab79f;
+  --americanSilver: #d3d2cd;
+  --grullo: #a08d83;
+  --darkSilver: #726870;
+  /* Theme */
+  --header-background-color: var(--americanSilver);
+  --main-background-color: var(--gray);
+  --cell-background-color: var(--laurelGreen);
+  --cell-border-color: var(--artichoke);
+  --footer-background-color: var(--darkSilver);
+  /* Game settings */
+  --cell-size: 35px;
+}
 
 #App {
   display: flex;

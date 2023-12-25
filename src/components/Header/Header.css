@@ -2,7 +2,7 @@ header {
   display: flex;
   align-items: center;
   color: #212121;
-  background-color: #d3d2cd;
+  background-color: var(--header-background-color);
   padding: 1rem;
   max-height: 4rem;
   width: 100vw;
