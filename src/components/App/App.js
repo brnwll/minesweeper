@@ -17,29 +17,42 @@ function App() {
   // gameState - game state (playing, won, lost)
 
   const handleCellClick = (rowIndex, cellIndex, clickType) => {
-    if (clickType === "right") {
-      handleCellRightClick(rowIndex, cellIndex);
-    } else if (clickType === "left") {
-      handleCellLeftClick(rowIndex, cellIndex);
-    }
+    if (preventCellClick(clickType, rowIndex, cellIndex)) return;
+    clickType === "right"
+      ? handleCellRightClick(rowIndex, cellIndex)
+      : handleCellLeftClick(rowIndex, cellIndex);
   };
 
   const handleCellLeftClick = (rowIndex, cellIndex) => {
-    // if left click, reveal cell
-    // -- if flag, do nothing
-    console.log("Left click");
+    // TODO: if cell is a 0, reveal empty cells around it
+    // TODO: don't display 0, instead display space ' '? or empty string ''?
+    setDisplay(
+      display.map((row, rowIdx) =>
+        row.map((cell, cellIdx) => {
+          if (rowIdx === rowIndex && cellIdx === cellIndex) {
+            return board[rowIdx][cellIdx];
+          } else {
+            return cell;
+          }
+        })
+      )
+    );
   };
 
   const handleCellRightClick = (rowIndex, cellIndex) => {
-    // if right click, toggle flag
-    // -- if no flag, add flag
-    // -- if flag, remove flag
     let newDisplay = [...display];
     newDisplay[rowIndex][cellIndex] =
       newDisplay[rowIndex][cellIndex] === Constants.FLAG
         ? Constants.EMPTY
         : Constants.FLAG;
     setDisplay(newDisplay);
+  };
+
+  const preventCellClick = (clickType, rowIndex, cellIndex) => {
+    const cell = display[rowIndex][cellIndex];
+    return clickType === "right"
+      ? cell !== Constants.EMPTY && cell !== Constants.FLAG // right click
+      : cell !== Constants.EMPTY; // left click
   };
 
   useEffect(() => {}, [display]);
