@@ -3,24 +3,24 @@ import Header from "../Header/Header";
 import Board from "../Board/Board";
 import Footer from "../Footer/Footer";
 import * as Minesweeper from "../Helpers/Minesweeper";
-import { BOMB, FLAG, UNSELECTED, EMPTY } from "../Helpers/Constants";
+import * as Constant from "../Helpers/Constants";
 import "./App.css";
 
-const initSize = 15; // TODO: make this a user input
-const initBomb = 35; // TODO: make this a user input
+const initSize = 15; // TODO: make this a user input, move to state
+const initBomb = 35; // TODO: make this a user input, move to state
 const initialBoard = Minesweeper.initializeBoard(initSize, initSize, initBomb);
 const initialDisplay = Minesweeper.getBoardOf(initSize, initSize, "");
 
 function App() {
   const [board, setBoard] = useState(initialBoard); // underlying board state
   const [display, setDisplay] = useState(initialDisplay); // what user sees
-  // gameState - game state (playing, won, lost)
+  const [gameState, setGameState] = useState(Constant.PLAYING); // playing, won, lost
 
   const preventCellClick = (clickType, rowIndex, cellIndex) => {
     const cell = display[rowIndex][cellIndex];
     return clickType === "right"
-      ? cell !== UNSELECTED && cell !== FLAG // right click
-      : cell !== UNSELECTED; // left click
+      ? cell !== Constant.UNSELECTED && cell !== Constant.FLAG // right click
+      : cell !== Constant.UNSELECTED; // left click
   };
 
   const handleCellClick = (rowIndex, cellIndex, clickType) => {
@@ -31,20 +31,20 @@ function App() {
 
   const handleCellLeftClick = (rowIndex, cellIndex) => {
     const cell = board[rowIndex][cellIndex];
-    if (cell === BOMB) handleCellWithBombClick(rowIndex, cellIndex);
+    if (cell === Constant.BOMB) handleCellWithBombClick(rowIndex, cellIndex);
     else if (cell === 0) handleCellWithZeroClick(rowIndex, cellIndex);
     else handleCellWithNumberClick(rowIndex, cellIndex);
   };
 
   const handleCellWithBombClick = (rowIndex, cellIndex) => {
-    updateDisplayCell(rowIndex, cellIndex, BOMB);
+    updateDisplayCell(rowIndex, cellIndex, Constant.BOMB);
     // TODO: reveal all bombs and end game
   };
 
   const handleCellWithZeroClick = (rowIndex, cellIndex) => {
-    updateDisplayCell(rowIndex, cellIndex, EMPTY);
+    updateDisplayCell(rowIndex, cellIndex, Constant.EMPTY);
     Minesweeper.visitNeighbors(board, rowIndex, cellIndex, (r, c) => {
-      if (display[r][c] === UNSELECTED) handleCellLeftClick(r, c);
+      if (display[r][c] === Constant.UNSELECTED) handleCellLeftClick(r, c);
     });
   };
 
@@ -61,15 +61,41 @@ function App() {
   const handleCellRightClick = (rowIndex, cellIndex) => {
     let newDisplay = [...display];
     newDisplay[rowIndex][cellIndex] =
-      newDisplay[rowIndex][cellIndex] === FLAG ? UNSELECTED : FLAG;
+      newDisplay[rowIndex][cellIndex] === Constant.FLAG
+        ? Constant.UNSELECTED
+        : Constant.FLAG;
     setDisplay(newDisplay);
   };
 
-  useEffect(() => {}, [display]);
+  useEffect(() => {
+    if (gameState !== Constant.PLAYING) return;
+    // if display contains a BOMB, game over, display ALL bombs
+    Minesweeper.traverse(display, (r, c) => {
+      if (display[r][c] === Constant.BOMB) {
+        setGameState(Constant.LOST);
+        // TODO: reveal all bombs and end game
+        return;
+      }
+    });
+    /*
+    display.forEach((row) => {
+      for (let cell of row) {
+        if (cell === Constant.BOMB) {
+          setGameState(Constant.LOST);
+          return;
+        }
+      }
+    });
+    */
+
+    // if display contains only integers, " " and flags
+    // and if flag count matches bomb count, game won
+  }, [display]);
 
   return (
     <div id="App">
       <Header />
+      <p>Game State: {gameState}</p>
       <Board display={display} handleCellClick={handleCellClick} />
       <Footer />
     </div>
