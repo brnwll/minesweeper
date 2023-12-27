@@ -7,7 +7,66 @@
   border: 1px solid var(--cell-border-color);
   background-color: var(--cell-background-color);
   font-family: "Pixel", sans-serif;
-  font-size: 1.5rem;
+  font-size: var(--cell-font-size);
   font-weight: bold;
   cursor: pointer;
+}
+
+.cleared {
+  background-color: var(--cell-cleared-background-color);
+}
+
+.bomb {
+  background-color: var(--cell-bomb-background-color);
+  font-size: 20px;
+  line-height: 37px;
+  border: 2px solid var(--cell-bomb-border-color);
+  border-radius: 2px;
+}
+
+.flag {
+  background-color: var(--cell-flag-background-color);
+}
+
+.one,
+.two,
+.three,
+.four,
+.five,
+.six,
+.seven,
+.eight {
+  background-color: var(--cell-integer-background-color);
+}
+
+.one {
+  color: var(--cell-one-color);
+}
+
+.two {
+  color: var(--cell-two-color);
+}
+
+.three {
+  color: var(--cell-three-color);
+}
+
+.four {
+  color: var(--cell-four-color);
+}
+
+.five {
+  color: var(--cell-five-color);
+}
+
+.six {
+  color: var(--cell-six-color);
+}
+
+.seven {
+  color: var(--cell-seven-color);
+}
+
+.eight {
+  color: var(--cell-eight-color);
 }

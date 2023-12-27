@@ -1,18 +1,36 @@
 :root {
+  /* Colors */
   --gray: #7c887e;
   --artichoke: #91967f;
+  --artichoke1: #a2a692;
+  --artichoke2: rgb(153, 156, 141);
   --laurelGreen: #bab79f;
   --americanSilver: #d3d2cd;
   --grullo: #a08d83;
   --darkSilver: #726870;
-  /* Theme */
+  /* Theme - main elements */
   --header-background-color: var(--americanSilver);
   --main-background-color: var(--gray);
+  --footer-background-color: var(--darkSilver);
+  /* Theme - cells */
   --cell-background-color: var(--laurelGreen);
   --cell-border-color: var(--artichoke);
-  --footer-background-color: var(--darkSilver);
+  --cell-one-color: #216a33;
+  --cell-two-color: rgb(0, 61, 159);
+  --cell-three-color: purple;
+  --cell-four-color: rgb(163, 11, 21);
+  --cell-five-color: rgb(205, 0, 0);
+  --cell-six-color: rgb(255, 0, 0);
+  --cell-seven-color: rgb(255, 0, 0);
+  --cell-eight-color: rgb(255, 0, 0);
+  --cell-bomb-background-color: rgb(255, 255, 255);
+  --cell-bomb-border-color: rgb(255, 0, 0);
+  --cell-flag-background-color: var(--americanSilver);
+  --cell-cleared-background-color: var(--artichoke1);
+  --cell-integer-background-color: var(--artichoke2);
   /* Game settings */
   --cell-size: 35px;
+  --cell-font-size: 30px;
 }
 
 #App {
