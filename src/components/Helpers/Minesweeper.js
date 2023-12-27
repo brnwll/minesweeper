@@ -1,4 +1,4 @@
-import * as Constants from "./Constants";
+import { BOMB } from "./Constants";
 
 export const initializeBoard = (numRows, numCols, bombCount) => {
   let board = getBoardOf(numRows, numCols, 0);
@@ -18,16 +18,16 @@ export const addBombsTo = (board, bombCount) => {
     const row = Math.floor(Math.random() * board.length);
     const col = Math.floor(Math.random() * board[0].length);
     if (board[row][col] === 0) {
-      board[row][col] = Constants.BOMB;
+      board[row][col] = BOMB;
       bombsPlaced++;
     }
   }
 };
 
 export const addAdjacentBombCountsTo = (board) => {
-  const incNeighbor = (r, c) => board[r][c] !== Constants.BOMB && board[r][c]++;
+  const incNeighbor = (r, c) => board[r][c] !== BOMB && board[r][c]++;
   const incNeighborsOfBomb = (r, c) =>
-    board[r][c] === Constants.BOMB && visitNeighbors(board, r, c, incNeighbor);
+    board[r][c] === BOMB && visitNeighbors(board, r, c, incNeighbor);
   traverse(board, incNeighborsOfBomb);
 };
 
