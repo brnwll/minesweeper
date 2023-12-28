@@ -11,30 +11,26 @@ const useDisplay = ({ rows, cols }) => {
     setDisplay(updatedDisplay);
   };
 
-  // TODO: REQUIRES REFACTORING
-  const updateFlag = (r, c, board, bombsRemaining, setBombsRemaining) => {
-    const wasFlagged = display[r][c] === FLAG; // cell previously flagged
-    if (bombsRemaining > 0 || wasFlagged) {
-      // prevent adding more flags than bombs, always allow removing flags
-      let newDisplay = [...display];
-      // EDGE: flag is inside region that would have been revealed,
-      // when unflagged, display as if it had been revealed
-      let emptyNeighborFound = false;
-      if (wasFlagged) {
-        console.log("wasFlagged");
-        MS.visitNeighbors(board, r, c, (r, c) => {
-          if (board[r][c] === 0) emptyNeighborFound = true;
-        });
-      }
-      if (emptyNeighborFound) {
-        console.log("emptyNeighborFound");
-        newDisplay[r][c] = board[r][c] === 0 ? EMPTY : board[r][c];
-      } else {
-        newDisplay[r][c] = wasFlagged ? UNSELECTED : FLAG;
-      }
-      setDisplay(newDisplay);
-      setBombsRemaining(bombsRemaining + (wasFlagged ? 1 : -1));
-    }
+  const toggleFlag = (r, c, board, bombsRemaining, setBombsRemaining) => {
+    const flagged = display[r][c] === FLAG;
+    // prevent adding more flags than bombs, always allow removing flags
+    if (bombsRemaining === 0 && !flagged) return;
+    let newDisplay = [...display];
+    if (flagged && inRevealedRegion(board, r, c))
+      newDisplay[r][c] = board[r][c] === 0 ? EMPTY : board[r][c];
+    else newDisplay[r][c] = flagged ? UNSELECTED : FLAG;
+    setDisplay(newDisplay);
+    setBombsRemaining(bombsRemaining + (flagged ? 1 : -1));
+  };
+
+  const inRevealedRegion = (board, r, c) => {
+    // Unhandled edge case: when a flag(s) stop an empty region from
+    // fully revealing, unflagging should complete the reveal
+    let inRevealedRegion = false;
+    MS.visitNeighbors(board, r, c, (r, c) => {
+      if (display[r][c] === EMPTY) inRevealedRegion = true;
+    });
+    return inRevealedRegion;
   };
 
   const reset = (difficulty) => {
@@ -54,7 +50,7 @@ const useDisplay = ({ rows, cols }) => {
     );
   };
 
-  return [display, setDisplay, updateCell, updateFlag, reset, showBombs];
+  return [display, setDisplay, updateCell, toggleFlag, reset, showBombs];
 };
 
 export default useDisplay;

@@ -21,7 +21,7 @@ function App() {
       difficulty.bombs
     )
   );
-  const [display, setDisplay, updateCell, updateFlag, resetDisplay, showBombs] =
+  const [display, setDisplay, updateCell, toggleFlag, resetDisplay, showBombs] =
     useDisplay(difficulty); // what user sees
   const [gameStatus, setGameStatus] = useState(NOT_STARTED);
 
@@ -65,7 +65,7 @@ function App() {
   };
 
   const handleCellRightClick = (r, c) => {
-    updateFlag(r, c, board, bombsRemaining, setBombsRemaining);
+    toggleFlag(r, c, board, bombsRemaining, setBombsRemaining);
   };
 
   const checkGameStatus = () => {
@@ -76,6 +76,10 @@ function App() {
         return cell;
       })
     );
+
+    // BUG: click on bomb for last move instead of flagging it.
+    // Reads as a win, but should be a loss.
+
     if (board.toString() === formattedDisplayToMatchBoard.toString()) {
       setGameStatus(WON);
     } else if (display.toString().includes(BOMB)) {

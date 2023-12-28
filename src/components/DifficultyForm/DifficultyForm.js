@@ -8,7 +8,6 @@ const Settings = ({ onDifficultyChange }) => {
     const { value } = e.target;
     onDifficultyChange(value);
     setSelected(value);
-    console.log(value);
   };
 
   return (
