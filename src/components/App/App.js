@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from "../Header/Header";
 import Timer from "../Timer/Timer";
+import Settings from "../Settings/Settings";
 import Board from "../Board/Board";
 import Footer from "../Footer/Footer";
 import * as Minesweeper from "../Helpers/Minesweeper";
@@ -73,42 +74,53 @@ function App() {
 
   useEffect(() => {
     if (gameState !== Constant.PLAYING) return;
+
     // if display contains a BOMB, game over, display ALL bombs
     Minesweeper.traverse(display, (r, c) => {
       if (display[r][c] === Constant.BOMB) {
+        console.log(`BOMB at ${r}, ${c}`);
         setGameState(Constant.LOST);
-        // TODO: reveal all bombs and end game
+        // TODO: reveal all bombs
         return;
       }
     });
+
+    // win check
     /*
-    display.forEach((row) => {
-      for (let cell of row) {
-        if (cell === Constant.BOMB) {
-          setGameState(Constant.LOST);
-          return;
+    display.forEach((row, rowIndex) => {
+      row.forEach((col, colIndex) => {
+        if (col === Board[rowIndex][colIndex]) {
+          console.log(` ${rowIndex}, ${colIndex}`);
         }
-      }
+      })
+
     });
     */
 
     // if display contains only integers, " " and flags
     // and if flag count matches bomb count, game won
-  }, [display]);
+  }, [display, gameState]);
+
+  useEffect(() => {
+    // refactor
+    if (difficulty === Constant.EASY) {
+      setBoard(Minesweeper.initializeBoard(8, 8, 10));
+      setDisplay(Minesweeper.getBoardOf(8, 8, ""));
+    } else if (difficulty === Constant.MEDIUM) {
+      setBoard(Minesweeper.initializeBoard(16, 16, 40));
+      setDisplay(Minesweeper.getBoardOf(16, 16, ""));
+    } else if (difficulty === Constant.HARD) {
+      setBoard(Minesweeper.initializeBoard(16, 31, 99));
+      setDisplay(Minesweeper.getBoardOf(16, 31, ""));
+    }
+    setGameState(Constant.NOT_STARTED);
+  }, [difficulty]);
 
   return (
     <div id="App">
       <Header />
       <p>Game State: {gameState}</p>
-      <form>
-        <label htmlFor="difficulty">Difficulty:</label>
-        <input type="radio" id="easy" name="difficulty" value="easy" />
-        <label htmlFor="easy">Easy</label>
-        <input type="radio" id="medium" name="difficulty" value="medium" />
-        <label htmlFor="medium">Medium</label>
-        <input type="radio" id="hard" name="difficulty" value="hard" />
-        <label htmlFor="hard">Hard</label>
-      </form>
+      <Settings onDifficultyChange={setDifficulty} />
       <Timer gameState={gameState} />
       <Board display={display} handleCellClick={handleCellClick} />
       <Footer />

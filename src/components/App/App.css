@@ -29,8 +29,8 @@
   --cell-cleared-background-color: var(--artichoke1);
   --cell-integer-background-color: var(--artichoke2);
   /* Game settings */
-  --cell-size: 35px;
-  --cell-font-size: 30px;
+  --cell-size: 25px;
+  --cell-font-size: 18px;
 }
 
 #App {

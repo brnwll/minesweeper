@@ -6,6 +6,10 @@ const Timer = ({ gameState }) => {
   const [timer, setTimer] = useState(0);
 
   useEffect(() => {
+    if (gameState === Constant.NOT_STARTED) {
+      setTimer(0);
+      return;
+    }
     if (gameState === Constant.PLAYING) {
       const interval = setInterval(() => {
         setTimer((timer) => timer + 1);
@@ -18,13 +22,3 @@ const Timer = ({ gameState }) => {
 };
 
 export default Timer;
-
-/*
-  const startTimer = () => {
-    setInterval(() => {
-      setTimer((timer) => timer + 1);
-    }, 1000);
-  };
-
-  const stopTimer = () => clearInterval(startTimer);
-  */
