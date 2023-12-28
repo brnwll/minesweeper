@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
-import * as Constant from "../Helpers/Constants";
+import { NOT_STARTED, PLAYING, WON, LOST } from "../../helpers/Constants";
 import "./Timer.css";
 
 const Timer = ({ gameState }) => {
   const [timer, setTimer] = useState(0);
 
   useEffect(() => {
-    if (gameState === Constant.NOT_STARTED) {
-      setTimer(0);
-      return;
+    let clock;
+    if (gameState === NOT_STARTED) setTimer(0);
+    if (gameState === LOST || gameState === WON) clearInterval(clock);
+    if (gameState === PLAYING) {
+      clock = setInterval(() => setTimer((t) => t + 1), 1000);
     }
-    if (gameState === Constant.PLAYING) {
-      const interval = setInterval(() => {
-        setTimer((timer) => timer + 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
+    return () => clearInterval(clock);
   }, [gameState]);
 
   return <div id="Timer">{timer}</div>;

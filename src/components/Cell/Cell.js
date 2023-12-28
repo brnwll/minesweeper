@@ -1,5 +1,5 @@
 import "./Cell.css";
-import { BOMB, EMPTY, FLAG } from "../Helpers/Constants";
+import { BOMB, EMPTY, FLAG } from "../../helpers/Constants";
 
 const Cell = ({ cell, row, col, handleCellClick }) => {
   const onClick = (e) => {

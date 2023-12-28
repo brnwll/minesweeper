@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EASY, MEDIUM, HARD } from "../Helpers/Constants";
+import { EASY, MEDIUM, HARD } from "../../helpers/Constants";
 
 const Settings = ({ onDifficultyChange }) => {
   const [selected, setSelected] = useState(EASY);
@@ -8,6 +8,7 @@ const Settings = ({ onDifficultyChange }) => {
     const { value } = e.target;
     onDifficultyChange(value);
     setSelected(value);
+    console.log(value);
   };
 
   return (
