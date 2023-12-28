@@ -50,7 +50,7 @@ const useDisplay = ({ rows, cols }) => {
     );
   };
 
-  return [display, setDisplay, updateCell, toggleFlag, reset, showBombs];
+  return [display, updateCell, toggleFlag, reset, showBombs];
 };
 
 export default useDisplay;

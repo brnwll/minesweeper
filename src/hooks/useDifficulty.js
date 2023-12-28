@@ -22,7 +22,10 @@ const options = {
 const useDifficulty = () => {
   const [difficulty, setDifficulty] = useState(options[EASY]);
   const update = (difficulty) => setDifficulty(options[difficulty]);
-  return [difficulty, update];
+
+  const get = (difficulty) => options[difficulty];
+
+  return [difficulty, update, get];
 };
 
 export default useDifficulty;

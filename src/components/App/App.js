@@ -12,7 +12,7 @@ import { BOMB, EMPTY, FLAG, UNSELECTED, EASY } from "../../helpers/Constants";
 import "./App.css";
 
 function App() {
-  const [difficulty, setDifficulty] = useDifficulty(EASY);
+  const [difficulty, setDifficulty, getDifficulty] = useDifficulty(EASY);
   const [bombsRemaining, setBombsRemaining] = useState(difficulty.bombs);
   const [board, setBoard] = useState(
     Minesweeper.initializeBoard(
@@ -21,7 +21,7 @@ function App() {
       difficulty.bombs
     )
   );
-  const [display, setDisplay, updateCell, toggleFlag, resetDisplay, showBombs] =
+  const [display, updateCell, toggleFlag, resetDisplay, showBombs] =
     useDisplay(difficulty); // what user sees
   const [gameStatus, setGameStatus] = useState(NOT_STARTED);
 
@@ -86,14 +86,6 @@ function App() {
   };
 
   useEffect(() => {
-    const { rows, cols, bombs } = difficulty;
-    setBoard(Minesweeper.initializeBoard(rows, cols, bombs));
-    resetDisplay(difficulty);
-    setGameStatus(NOT_STARTED);
-    setBombsRemaining(bombs);
-  }, [difficulty]); // TODO : Fix this warning
-
-  useEffect(() => {
     if (gameStatus === WON) {
       // TODO: feedback
     } else if (gameStatus === LOST) {
@@ -101,12 +93,26 @@ function App() {
     }
   }, [gameStatus]);
 
+  const onDifficultyChange = (difficulty) => {
+    setDifficulty(difficulty);
+    setGameStatus(NOT_STARTED);
+    setBoard(
+      Minesweeper.initializeBoard(
+        getDifficulty(difficulty).rows,
+        getDifficulty(difficulty).cols,
+        getDifficulty(difficulty).bombs
+      )
+    );
+    resetDisplay(getDifficulty(difficulty));
+    setBombsRemaining(getDifficulty(difficulty).bombs);
+  };
+
   return (
     <div id="App">
       <Header />
       <p>Game State: {gameStatus}</p>
       <p>Bombs Remaining: {bombsRemaining}</p>
-      <DifficultyForm onDifficultyChange={setDifficulty} />
+      <DifficultyForm onDifficultyChange={onDifficultyChange} />
       <Timer gameStatus={gameStatus} />
       <Board display={display} handleCellClick={handleCellClick} />
       <Footer />
