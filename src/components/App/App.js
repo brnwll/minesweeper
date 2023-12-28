@@ -79,22 +79,34 @@ function App() {
     updateDisplayCell(rowIndex, cellIndex, board[rowIndex][cellIndex]);
   };
 
-  const handleCellRightClick = (rowIndex, cellIndex) => {
-    const cell = display[rowIndex][cellIndex];
-    if (bombsRemaining > 0 || cell === FLAG) {
-      // prevent adding more flags than bombs
-      // but always allow removing flags
+  const handleCellRightClick = (r, c) => {
+    const displayCell = display[r][c];
+    const boardCell = board[r][c];
+    const wasFlagged = displayCell === FLAG;
+    if (bombsRemaining > 0 || wasFlagged) {
+      // prevent adding more flags than bombs, always allow removing flags
       let newDisplay = [...display];
-      newDisplay[rowIndex][cellIndex] =
-        newDisplay[rowIndex][cellIndex] === FLAG ? UNSELECTED : FLAG;
-      const isFlag = newDisplay[rowIndex][cellIndex] === FLAG;
-      setBombsRemaining(bombsRemaining + (isFlag ? -1 : 1));
-      setDisplay(newDisplay);
-
       // TODO: if a flag is removed and it is in a region that would have
       // been revealed by the algorithm in handleCellWithZeroClick, then
       // we need to re-run that algorithm to reveal the region.
       // Possible edge case: if the flag was on the border of the region.
+      // visit neighbors, if any neighbor is EMPTY, then set to board value
+      // if all neighbors are numbers, then set to EMPTY
+      let emptyNeighborFound = false;
+      if (wasFlagged) {
+        Minesweeper.visitNeighbors(board, r, c, (r, c) => {
+          const neighbor = board[r][c];
+          if (neighbor === 0) emptyNeighborFound = true;
+        });
+      }
+      if (emptyNeighborFound) {
+        newDisplay[r][c] = board[r][c] === 0 ? EMPTY : board[r][c];
+      } else {
+        newDisplay[r][c] = wasFlagged ? UNSELECTED : FLAG;
+      }
+      console.log(wasFlagged);
+      setBombsRemaining(bombsRemaining + (wasFlagged ? 1 : -1));
+      setDisplay(newDisplay);
     }
   };
 
@@ -131,6 +143,7 @@ function App() {
     setBoard(Minesweeper.initializeBoard(rows, cols, bombs));
     setDisplay(Minesweeper.getBoardOf(rows, cols, ""));
     setGameState(NOT_STARTED);
+    setBombsRemaining(bombs);
   }, [difficulty]);
 
   useEffect(() => {

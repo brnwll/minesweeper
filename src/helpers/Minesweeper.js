@@ -1,4 +1,4 @@
-import { BOMB } from "./Constants";
+import { BOMB, UNSELECTED } from "./Constants";
 
 export const initializeBoard = (numRows, numCols, bombCount) => {
   let board = getBoardOf(numRows, numCols, 0);
