@@ -21,6 +21,7 @@ import "./App.css";
 
 function App() {
   const [difficulty, setDifficulty] = useDifficulty(EASY);
+  const [bombsRemaining, setBombsRemaining] = useState(difficulty.bombs);
   const [board, setBoard] = useState(
     Minesweeper.initializeBoard(
       difficulty.rows,
@@ -79,10 +80,22 @@ function App() {
   };
 
   const handleCellRightClick = (rowIndex, cellIndex) => {
-    let newDisplay = [...display];
-    newDisplay[rowIndex][cellIndex] =
-      newDisplay[rowIndex][cellIndex] === FLAG ? UNSELECTED : FLAG;
-    setDisplay(newDisplay);
+    const cell = display[rowIndex][cellIndex];
+    if (bombsRemaining > 0 || cell === FLAG) {
+      // prevent adding more flags than bombs
+      // but always allow removing flags
+      let newDisplay = [...display];
+      newDisplay[rowIndex][cellIndex] =
+        newDisplay[rowIndex][cellIndex] === FLAG ? UNSELECTED : FLAG;
+      const isFlag = newDisplay[rowIndex][cellIndex] === FLAG;
+      setBombsRemaining(bombsRemaining + (isFlag ? -1 : 1));
+      setDisplay(newDisplay);
+
+      // TODO: if a flag is removed and it is in a region that would have
+      // been revealed by the algorithm in handleCellWithZeroClick, then
+      // we need to re-run that algorithm to reveal the region.
+      // Possible edge case: if the flag was on the border of the region.
+    }
   };
 
   const checkGameStatus = () => {
@@ -132,6 +145,7 @@ function App() {
     <div id="App">
       <Header />
       <p>Game State: {gameState}</p>
+      <p>Bombs Remaining: {bombsRemaining}</p>
       <DifficultyForm onDifficultyChange={setDifficulty} />
       <Timer gameState={gameState} />
       <Board display={display} handleCellClick={handleCellClick} />
