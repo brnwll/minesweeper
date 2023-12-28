@@ -6,17 +6,8 @@ import DifficultyForm from "../DifficultyForm/DifficultyForm";
 import Board from "../Board/Board";
 import Footer from "../Footer/Footer";
 import * as Minesweeper from "../../helpers/Minesweeper";
-import {
-  EASY,
-  NOT_STARTED,
-  PLAYING,
-  WON,
-  LOST,
-  BOMB,
-  EMPTY,
-  FLAG,
-  UNSELECTED,
-} from "../../helpers/Constants";
+import { NOT_STARTED, PLAYING, WON, LOST } from "../../helpers/Constants";
+import { BOMB, EMPTY, FLAG, UNSELECTED, EASY } from "../../helpers/Constants";
 import "./App.css";
 
 function App() {
@@ -32,7 +23,7 @@ function App() {
   const [display, setDisplay] = useState(
     Minesweeper.getBoardOf(difficulty.rows, difficulty.cols, "")
   ); // what user sees
-  const [gameState, setGameState] = useState(NOT_STARTED);
+  const [gameStatus, setGameStatus] = useState(NOT_STARTED);
 
   const preventCellClick = (clickType, rowIndex, cellIndex) => {
     const cell = display[rowIndex][cellIndex];
@@ -42,8 +33,8 @@ function App() {
   };
 
   const handleCellClick = (rowIndex, cellIndex, clickType) => {
-    if (gameState === NOT_STARTED) setGameState(PLAYING);
-    if (gameState === LOST || gameState === WON) return;
+    if (gameStatus === NOT_STARTED) setGameStatus(PLAYING);
+    if (gameStatus === LOST || gameStatus === WON) return;
     if (preventCellClick(clickType, rowIndex, cellIndex)) return;
     if (clickType === "left") handleCellLeftClick(rowIndex, cellIndex);
     if (clickType === "right") handleCellRightClick(rowIndex, cellIndex);
@@ -59,7 +50,7 @@ function App() {
 
   const handleCellWithBombClick = (rowIndex, cellIndex) => {
     updateDisplayCell(rowIndex, cellIndex, BOMB);
-    setGameState(LOST);
+    setGameStatus(LOST);
   };
 
   const handleCellWithZeroClick = (rowIndex, cellIndex) => {
@@ -119,9 +110,9 @@ function App() {
       })
     );
     if (board.toString() === formattedDisplayToMatchBoard.toString()) {
-      setGameState(WON);
+      setGameStatus(WON);
     } else if (display.toString().includes(BOMB)) {
-      setGameState(LOST);
+      setGameStatus(LOST);
       displayAllUnflaggedBombs();
     }
   };
@@ -142,25 +133,25 @@ function App() {
     const { rows, cols, bombs } = difficulty;
     setBoard(Minesweeper.initializeBoard(rows, cols, bombs));
     setDisplay(Minesweeper.getBoardOf(rows, cols, ""));
-    setGameState(NOT_STARTED);
+    setGameStatus(NOT_STARTED);
     setBombsRemaining(bombs);
   }, [difficulty]);
 
   useEffect(() => {
-    if (gameState === WON) {
+    if (gameStatus === WON) {
       // TODO: feedback
-    } else if (gameState === LOST) {
+    } else if (gameStatus === LOST) {
       // TODO: feedback
     }
-  }, [gameState]);
+  }, [gameStatus]);
 
   return (
     <div id="App">
       <Header />
-      <p>Game State: {gameState}</p>
+      <p>Game State: {gameStatus}</p>
       <p>Bombs Remaining: {bombsRemaining}</p>
       <DifficultyForm onDifficultyChange={setDifficulty} />
-      <Timer gameState={gameState} />
+      <Timer gameStatus={gameStatus} />
       <Board display={display} handleCellClick={handleCellClick} />
       <Footer />
     </div>
