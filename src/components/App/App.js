@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useDifficulty from "../../hooks/useDifficulty";
+import useDisplay from "../../hooks/useDisplay";
 import Header from "../Header/Header";
 import Timer from "../Timer/Timer";
 import DifficultyForm from "../DifficultyForm/DifficultyForm";
@@ -20,9 +21,8 @@ function App() {
       difficulty.bombs
     )
   );
-  const [display, setDisplay] = useState(
-    Minesweeper.getBoardOf(difficulty.rows, difficulty.cols, "")
-  ); // what user sees
+  const [display, setDisplay, updateCell, updateFlag, resetDisplay, showBombs] =
+    useDisplay(difficulty); // what user sees
   const [gameStatus, setGameStatus] = useState(NOT_STARTED);
 
   const preventCellClick = (clickType, rowIndex, cellIndex) => {
@@ -49,56 +49,23 @@ function App() {
   };
 
   const handleCellWithBombClick = (rowIndex, cellIndex) => {
-    updateDisplayCell(rowIndex, cellIndex, BOMB);
+    updateCell(rowIndex, cellIndex, BOMB);
     setGameStatus(LOST);
   };
 
   const handleCellWithZeroClick = (rowIndex, cellIndex) => {
-    updateDisplayCell(rowIndex, cellIndex, EMPTY);
+    updateCell(rowIndex, cellIndex, EMPTY);
     Minesweeper.visitNeighbors(board, rowIndex, cellIndex, (r, c) => {
       if (display[r][c] === UNSELECTED) handleCellLeftClick(r, c);
     });
   };
 
-  const updateDisplayCell = (rowIndex, cellIndex, value) => {
-    const newDisplay = [...display];
-    newDisplay[rowIndex][cellIndex] = value;
-    setDisplay(newDisplay);
-  };
-
   const handleCellWithNumberClick = (rowIndex, cellIndex) => {
-    updateDisplayCell(rowIndex, cellIndex, board[rowIndex][cellIndex]);
+    updateCell(rowIndex, cellIndex, board[rowIndex][cellIndex]);
   };
 
   const handleCellRightClick = (r, c) => {
-    const displayCell = display[r][c];
-    const boardCell = board[r][c];
-    const wasFlagged = displayCell === FLAG;
-    if (bombsRemaining > 0 || wasFlagged) {
-      // prevent adding more flags than bombs, always allow removing flags
-      let newDisplay = [...display];
-      // TODO: if a flag is removed and it is in a region that would have
-      // been revealed by the algorithm in handleCellWithZeroClick, then
-      // we need to re-run that algorithm to reveal the region.
-      // Possible edge case: if the flag was on the border of the region.
-      // visit neighbors, if any neighbor is EMPTY, then set to board value
-      // if all neighbors are numbers, then set to EMPTY
-      let emptyNeighborFound = false;
-      if (wasFlagged) {
-        Minesweeper.visitNeighbors(board, r, c, (r, c) => {
-          const neighbor = board[r][c];
-          if (neighbor === 0) emptyNeighborFound = true;
-        });
-      }
-      if (emptyNeighborFound) {
-        newDisplay[r][c] = board[r][c] === 0 ? EMPTY : board[r][c];
-      } else {
-        newDisplay[r][c] = wasFlagged ? UNSELECTED : FLAG;
-      }
-      console.log(wasFlagged);
-      setBombsRemaining(bombsRemaining + (wasFlagged ? 1 : -1));
-      setDisplay(newDisplay);
-    }
+    updateFlag(r, c, board, bombsRemaining, setBombsRemaining);
   };
 
   const checkGameStatus = () => {
@@ -113,29 +80,17 @@ function App() {
       setGameStatus(WON);
     } else if (display.toString().includes(BOMB)) {
       setGameStatus(LOST);
-      displayAllUnflaggedBombs();
+      showBombs(board);
     }
-  };
-
-  const displayAllUnflaggedBombs = () => {
-    setDisplay(
-      display.map((row, rowIndex) =>
-        row.map((cell, colIndex) => {
-          const isBomb = board[rowIndex][colIndex] === BOMB;
-          const isUnflagged = cell !== FLAG;
-          return isBomb && isUnflagged ? BOMB : cell;
-        })
-      )
-    );
   };
 
   useEffect(() => {
     const { rows, cols, bombs } = difficulty;
     setBoard(Minesweeper.initializeBoard(rows, cols, bombs));
-    setDisplay(Minesweeper.getBoardOf(rows, cols, ""));
+    resetDisplay(difficulty);
     setGameStatus(NOT_STARTED);
     setBombsRemaining(bombs);
-  }, [difficulty]);
+  }, [difficulty]); // TODO : Fix this warning
 
   useEffect(() => {
     if (gameStatus === WON) {
