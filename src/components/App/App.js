@@ -77,14 +77,11 @@ function App() {
       })
     );
 
-    // BUG: click on bomb for last move instead of flagging it.
-    // Reads as a win, but should be a loss.
-
-    if (board.toString() === formattedDisplayToMatchBoard.toString()) {
-      setGameStatus(WON);
-    } else if (display.toString().includes(BOMB)) {
+    if (display.toString().includes(BOMB)) {
       setGameStatus(LOST);
       showBombs(board);
+    } else if (board.toString() === formattedDisplayToMatchBoard.toString()) {
+      setGameStatus(WON);
     }
   };
 
