@@ -32,7 +32,7 @@ function App() {
     if (prevent(type, r, c)) return;
     if (type === "left") leftClick(r, c);
     if (type === "right") rightClick(r, c);
-    gameState();
+    checkWinOrLose(); // win or lose
   };
 
   const leftClick = (r, c) => {
@@ -58,21 +58,29 @@ function App() {
   const rightClick = (r, c) =>
     toggleFlag(r, c, board, bombsRemaining, setBombsRemaining);
 
-  const gameState = () => {
-    const formattedDisplayToMatchBoard = display.map((row) =>
-      row.map((cell) => {
-        if (cell === FLAG) return BOMB;
-        if (cell === EMPTY) return 0;
-        return cell;
-      })
-    );
-
-    if (display.toString().includes(BOMB)) {
+  const checkWinOrLose = () => {
+    const lose = display.toString().includes(BOMB);
+    const win = board.toString() === mask(display).toString();
+    if (lose) {
       setGameStatus(LOST);
       showBombs(board);
-    } else if (board.toString() === formattedDisplayToMatchBoard.toString()) {
-      setGameStatus(WON);
-    }
+    } else if (win) setGameStatus(WON);
+  };
+
+  // hide portions of display to reveal board state below
+  const mask = (display) => display.map((r) => r.map((c) => maskParams(c)));
+  const maskParams = (cell) => {
+    if (cell === FLAG) return BOMB;
+    if (cell === EMPTY) return 0;
+    return cell;
+  };
+
+  const difficultyChange = (difficulty) => {
+    setDifficulty(difficulty);
+    setGameStatus(NOT_STARTED);
+    resetBoard(getDifficulty(difficulty));
+    resetDisplay(getDifficulty(difficulty));
+    setBombsRemaining(getDifficulty(difficulty).bombs);
   };
 
   useEffect(() => {
@@ -82,14 +90,6 @@ function App() {
       // TODO: feedback
     }
   }, [gameStatus]);
-
-  const difficultyChange = (difficulty) => {
-    setDifficulty(difficulty);
-    setGameStatus(NOT_STARTED);
-    resetBoard(getDifficulty(difficulty));
-    resetDisplay(getDifficulty(difficulty));
-    setBombsRemaining(getDifficulty(difficulty).bombs);
-  };
 
   return (
     <div id="App">
