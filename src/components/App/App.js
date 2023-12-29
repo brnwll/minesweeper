@@ -18,7 +18,7 @@ function App() {
   const [board, resetBoard] = useBoard(difficulty);
   const [display, updateCell, toggleFlag, resetDisplay, showBombs] =
     useDisplay(difficulty); // what user sees
-  const [gameStatus, setGameStatus] = useState(NOT_STARTED);
+  const [gameState, setGameState] = useState(NOT_STARTED);
 
   const prevent = (clickType, r, c) => {
     return clickType === "right"
@@ -27,8 +27,8 @@ function App() {
   };
 
   const click = (r, c, type) => {
-    if (gameStatus === NOT_STARTED) setGameStatus(PLAYING);
-    if (gameStatus === LOST || gameStatus === WON) return;
+    if (gameState === NOT_STARTED) setGameState(PLAYING);
+    if (gameState === LOST || gameState === WON) return;
     if (prevent(type, r, c)) return;
     if (type === "left") leftClick(r, c);
     if (type === "right") rightClick(r, c);
@@ -43,7 +43,7 @@ function App() {
 
   const bombClick = (r, c) => {
     updateCell(r, c, BOMB);
-    setGameStatus(LOST);
+    setGameState(LOST);
   };
 
   const zeroClick = (r, c) => {
@@ -62,9 +62,9 @@ function App() {
     const lose = display.toString().includes(BOMB);
     const win = board.toString() === mask(display).toString();
     if (lose) {
-      setGameStatus(LOST);
+      setGameState(LOST);
       showBombs(board);
-    } else if (win) setGameStatus(WON);
+    } else if (win) setGameState(WON);
   };
 
   // hide portions of display to reveal board state below
@@ -77,27 +77,23 @@ function App() {
 
   const difficultyChange = (difficulty) => {
     setDifficulty(difficulty);
-    setGameStatus(NOT_STARTED);
+    setGameState(NOT_STARTED);
     resetBoard(getDifficulty(difficulty));
     resetDisplay(getDifficulty(difficulty));
     setBombsRemaining(getDifficulty(difficulty).bombs);
   };
 
   useEffect(() => {
-    if (gameStatus === WON) {
+    if (gameState === WON) {
       // TODO: feedback
-    } else if (gameStatus === LOST) {
+    } else if (gameState === LOST) {
       // TODO: feedback
     }
-  }, [gameStatus]);
+  }, [gameState]);
 
   return (
     <div id="App">
-      <Header />
-      <p>Game State: {gameStatus}</p>
-      <p>Bombs Remaining: {bombsRemaining}</p>
-      <DifficultyForm onDifficultyChange={difficultyChange} />
-      <Timer gameStatus={gameStatus} />
+      <Header difficultyChange={difficultyChange} gameState={gameState} />
       <Board display={display} handleCellClick={click} />
       <Footer />
     </div>
@@ -105,3 +101,8 @@ function App() {
 }
 
 export default App;
+
+/*
+<p>Game State: {gameStatus}</p>
+      <p>Bombs Remaining: {bombsRemaining}</p>
+      */

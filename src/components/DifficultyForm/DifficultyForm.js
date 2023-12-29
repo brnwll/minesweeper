@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { EASY, MEDIUM, HARD } from "../../helpers/Constants";
 
-const Settings = ({ onDifficultyChange }) => {
+const Settings = ({ difficultyChange }) => {
   const [selected, setSelected] = useState(EASY);
 
   const onChange = (e) => {
     const { value } = e.target;
-    onDifficultyChange(value);
+    difficultyChange(value);
     setSelected(value);
   };
 
