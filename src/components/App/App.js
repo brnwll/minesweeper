@@ -20,50 +20,45 @@ function App() {
     useDisplay(difficulty); // what user sees
   const [gameStatus, setGameStatus] = useState(NOT_STARTED);
 
-  const preventCellClick = (clickType, rowIndex, cellIndex) => {
-    const cell = display[rowIndex][cellIndex];
+  const prevent = (clickType, r, c) => {
     return clickType === "right"
-      ? cell !== UNSELECTED && cell !== FLAG // right click
-      : cell !== UNSELECTED; // left click
+      ? display[r][c] !== UNSELECTED && display[r][c] !== FLAG // right
+      : display[r][c] !== UNSELECTED; // left
   };
 
-  const handleCellClick = (rowIndex, cellIndex, clickType) => {
+  const click = (r, c, type) => {
     if (gameStatus === NOT_STARTED) setGameStatus(PLAYING);
     if (gameStatus === LOST || gameStatus === WON) return;
-    if (preventCellClick(clickType, rowIndex, cellIndex)) return;
-    if (clickType === "left") handleCellLeftClick(rowIndex, cellIndex);
-    if (clickType === "right") handleCellRightClick(rowIndex, cellIndex);
-    checkGameStatus();
+    if (prevent(type, r, c)) return;
+    if (type === "left") leftClick(r, c);
+    if (type === "right") rightClick(r, c);
+    gameState();
   };
 
-  const handleCellLeftClick = (rowIndex, cellIndex) => {
-    const cell = board[rowIndex][cellIndex];
-    if (cell === BOMB) handleCellWithBombClick(rowIndex, cellIndex);
-    else if (cell === 0) handleCellWithZeroClick(rowIndex, cellIndex);
-    else handleCellWithNumberClick(rowIndex, cellIndex);
+  const leftClick = (r, c) => {
+    if (board[r][c] === BOMB) bombClick(r, c);
+    else if (board[r][c] === 0) zeroClick(r, c);
+    else numberClick(r, c);
   };
 
-  const handleCellWithBombClick = (rowIndex, cellIndex) => {
-    updateCell(rowIndex, cellIndex, BOMB);
+  const bombClick = (r, c) => {
+    updateCell(r, c, BOMB);
     setGameStatus(LOST);
   };
 
-  const handleCellWithZeroClick = (rowIndex, cellIndex) => {
-    updateCell(rowIndex, cellIndex, EMPTY);
-    MS.visitNeighbors(board, rowIndex, cellIndex, (r, c) => {
-      if (display[r][c] === UNSELECTED) handleCellLeftClick(r, c);
+  const zeroClick = (r, c) => {
+    updateCell(r, c, EMPTY);
+    MS.visitNeighbors(board, r, c, (r, c) => {
+      if (display[r][c] === UNSELECTED) leftClick(r, c);
     });
   };
 
-  const handleCellWithNumberClick = (rowIndex, cellIndex) => {
-    updateCell(rowIndex, cellIndex, board[rowIndex][cellIndex]);
-  };
+  const numberClick = (r, c) => updateCell(r, c, board[r][c]);
 
-  const handleCellRightClick = (r, c) => {
+  const rightClick = (r, c) =>
     toggleFlag(r, c, board, bombsRemaining, setBombsRemaining);
-  };
 
-  const checkGameStatus = () => {
+  const gameState = () => {
     const formattedDisplayToMatchBoard = display.map((row) =>
       row.map((cell) => {
         if (cell === FLAG) return BOMB;
@@ -88,7 +83,7 @@ function App() {
     }
   }, [gameStatus]);
 
-  const onDifficultyChange = (difficulty) => {
+  const difficultyChange = (difficulty) => {
     setDifficulty(difficulty);
     setGameStatus(NOT_STARTED);
     resetBoard(getDifficulty(difficulty));
@@ -101,9 +96,9 @@ function App() {
       <Header />
       <p>Game State: {gameStatus}</p>
       <p>Bombs Remaining: {bombsRemaining}</p>
-      <DifficultyForm onDifficultyChange={onDifficultyChange} />
+      <DifficultyForm onDifficultyChange={difficultyChange} />
       <Timer gameStatus={gameStatus} />
-      <Board display={display} handleCellClick={handleCellClick} />
+      <Board display={display} handleCellClick={click} />
       <Footer />
     </div>
   );
