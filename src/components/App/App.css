@@ -39,6 +39,8 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  font-family: Pixel, Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
 
 main {

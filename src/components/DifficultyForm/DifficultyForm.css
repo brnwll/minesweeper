@@ -1,0 +1,39 @@
+#difficultyForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 1rem;
+  padding: 2px 6px 2px 0;
+  background: rgb(229, 229, 229);
+  border-radius: 24px;
+  font-size: 20px;
+}
+
+.radio-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radio-wrapper label {
+  margin: 0.2rem 0 0.2rem 0.4rem;
+  padding: 0.25rem 1rem;
+  background-color: var(--americanSilver);
+  color: gray;
+  border-radius: 20px;
+}
+
+.radio-wrapper input[type="radio"] {
+  opacity: 0;
+  width: 0;
+}
+
+.radio-wrapper label.selected {
+  color: white;
+  background-color: rgb(111, 125, 120);
+}
+
+.radio-wrapper label:hover {
+  color: white;
+  background-color: var(--darkSilver);
+}
