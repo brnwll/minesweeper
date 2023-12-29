@@ -24,7 +24,7 @@ const useDisplay = ({ rows, cols }) => {
   };
 
   const inRevealedRegion = (board, r, c) => {
-    // Unhandled edge case: when a flag(s) stop an empty region from
+    // Unhandled edge case: when a flag(s) stops an empty region from
     // fully revealing, unflagging should complete the reveal
     let inRevealedRegion = false;
     MS.visitNeighbors(board, r, c, (r, c) => {

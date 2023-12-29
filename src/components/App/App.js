@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import useDifficulty from "../../hooks/useDifficulty";
 import useDisplay from "../../hooks/useDisplay";
+import useBoard from "../../hooks/useBoard";
 import Header from "../Header/Header";
 import Timer from "../Timer/Timer";
 import DifficultyForm from "../DifficultyForm/DifficultyForm";
 import Board from "../Board/Board";
 import Footer from "../Footer/Footer";
-import * as Minesweeper from "../../helpers/Minesweeper";
+import * as MS from "../../helpers/Minesweeper";
 import { NOT_STARTED, PLAYING, WON, LOST } from "../../helpers/Constants";
 import { BOMB, EMPTY, FLAG, UNSELECTED, EASY } from "../../helpers/Constants";
 import "./App.css";
@@ -14,13 +15,7 @@ import "./App.css";
 function App() {
   const [difficulty, setDifficulty, getDifficulty] = useDifficulty(EASY);
   const [bombsRemaining, setBombsRemaining] = useState(difficulty.bombs);
-  const [board, setBoard] = useState(
-    Minesweeper.initializeBoard(
-      difficulty.rows,
-      difficulty.cols,
-      difficulty.bombs
-    )
-  );
+  const [board, resetBoard] = useBoard(difficulty);
   const [display, updateCell, toggleFlag, resetDisplay, showBombs] =
     useDisplay(difficulty); // what user sees
   const [gameStatus, setGameStatus] = useState(NOT_STARTED);
@@ -55,7 +50,7 @@ function App() {
 
   const handleCellWithZeroClick = (rowIndex, cellIndex) => {
     updateCell(rowIndex, cellIndex, EMPTY);
-    Minesweeper.visitNeighbors(board, rowIndex, cellIndex, (r, c) => {
+    MS.visitNeighbors(board, rowIndex, cellIndex, (r, c) => {
       if (display[r][c] === UNSELECTED) handleCellLeftClick(r, c);
     });
   };
@@ -96,13 +91,7 @@ function App() {
   const onDifficultyChange = (difficulty) => {
     setDifficulty(difficulty);
     setGameStatus(NOT_STARTED);
-    setBoard(
-      Minesweeper.initializeBoard(
-        getDifficulty(difficulty).rows,
-        getDifficulty(difficulty).cols,
-        getDifficulty(difficulty).bombs
-      )
-    );
+    resetBoard(getDifficulty(difficulty));
     resetDisplay(getDifficulty(difficulty));
     setBombsRemaining(getDifficulty(difficulty).bombs);
   };

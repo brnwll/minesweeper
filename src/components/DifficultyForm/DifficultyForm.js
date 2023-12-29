@@ -10,6 +10,14 @@ const Settings = ({ onDifficultyChange }) => {
     setSelected(value);
   };
 
+  const onClick = (e) => {
+    const { value } = e.target;
+    if (value === selected) {
+      e.preventDefault();
+      onChange(e);
+    }
+  };
+
   return (
     <form>
       <input
@@ -19,6 +27,7 @@ const Settings = ({ onDifficultyChange }) => {
         value={EASY}
         checked={selected === EASY}
         onChange={onChange}
+        onClick={onClick}
       />
       <label htmlFor={EASY}>Easy</label>
       <input
@@ -28,6 +37,7 @@ const Settings = ({ onDifficultyChange }) => {
         value={MEDIUM}
         checked={selected === MEDIUM}
         onChange={onChange}
+        onClick={onClick}
       />
       <label htmlFor={MEDIUM}>Medium</label>
       <input
@@ -37,6 +47,7 @@ const Settings = ({ onDifficultyChange }) => {
         value={HARD}
         checked={selected === HARD}
         onChange={onChange}
+        onClick={onClick}
       />
       <label htmlFor={HARD}>Hard</label>
     </form>
