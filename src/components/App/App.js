@@ -93,7 +93,11 @@ function App() {
 
   return (
     <div id="App">
-      <Header difficultyChange={difficultyChange} gameState={gameState} />
+      <Header
+        difficultyChange={difficultyChange}
+        gameState={gameState}
+        bombsRemaining={bombsRemaining}
+      />
       <Board display={display} handleCellClick={click} />
       <Footer />
     </div>
@@ -101,8 +105,3 @@ function App() {
 }
 
 export default App;
-
-/*
-<p>Game State: {gameStatus}</p>
-      <p>Bombs Remaining: {bombsRemaining}</p>
-      */
