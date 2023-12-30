@@ -1,0 +1,40 @@
+#Timer {
+  position: relative;
+  height: 44px;
+  width: 44px;
+  border-radius: 22px;
+  border: 1px solid rgb(204, 205, 204);
+  color: var(--darkSilver);
+  background-color: rgb(229, 229, 229);
+}
+
+.number {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+}
+
+.hand {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 1px;
+  height: 22px;
+  border: 1px dotted rgb(204, 205, 204);
+  transform-origin: bottom;
+  animation: rotate-hand 60s linear infinite;
+}
+
+@keyframes rotate-hand {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
