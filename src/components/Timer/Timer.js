@@ -28,8 +28,8 @@ const Timer = ({ gameState }) => {
 
   return (
     <div id="Timer">
-      {gameState === PLAYING && <div class="hand"></div>}
-      <div class="number">{formatTime(timer)}</div>
+      {gameState === PLAYING && <div className="hand"></div>}
+      <div className="number">{formatTime(timer)}</div>
     </div>
   );
 };

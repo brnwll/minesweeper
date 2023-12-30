@@ -22,7 +22,7 @@ const Settings = ({ difficultyChange }) => {
   return (
     <form id="difficultyForm">
       <div className="radio-wrapper selected">
-        <label className={selected === EASY && "selected"} htmlFor={EASY}>
+        <label className={selected === EASY ? "selected" : ""} htmlFor={EASY}>
           Easy
         </label>
         <input
@@ -37,7 +37,10 @@ const Settings = ({ difficultyChange }) => {
       </div>
 
       <div className="radio-wrapper">
-        <label className={selected === MEDIUM && "selected"} htmlFor={MEDIUM}>
+        <label
+          className={selected === MEDIUM ? "selected" : ""}
+          htmlFor={MEDIUM}
+        >
           Medium
         </label>
         <input
@@ -52,7 +55,7 @@ const Settings = ({ difficultyChange }) => {
       </div>
 
       <div className="radio-wrapper">
-        <label className={selected === HARD && "selected"} htmlFor={HARD}>
+        <label className={selected === HARD ? "selected" : ""} htmlFor={HARD}>
           Hard
         </label>
         <input

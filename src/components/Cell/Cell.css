@@ -10,6 +10,9 @@
   font-size: var(--cell-font-size);
   font-weight: bold;
   cursor: pointer;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Standard syntax */
 }
 
 .cleared {
