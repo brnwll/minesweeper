@@ -43,3 +43,9 @@ header > h1 {
     display: none;
   }
 }
+
+@media screen and (max-width: 460px) {
+  header > img {
+    display: none;
+  }
+}
