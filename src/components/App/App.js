@@ -62,7 +62,9 @@ function App() {
     if (lose) {
       setGameState(LOST);
       showBombs(board);
-    } else if (win) setGameState(WON);
+    } else if (win) {
+      setGameState(WON);
+    }
   };
 
   // hide portions of display to reveal board state below
@@ -81,14 +83,6 @@ function App() {
     setBombsRemaining(getDifficulty(difficulty).bombs);
   };
 
-  useEffect(() => {
-    if (gameState === WON) {
-      // TODO: feedback
-    } else if (gameState === LOST) {
-      // TODO: feedback
-    }
-  }, [gameState]);
-
   return (
     <div id="App">
       <Header
@@ -96,7 +90,7 @@ function App() {
         gameState={gameState}
         bombsRemaining={bombsRemaining}
       />
-      <Board display={display} handleCellClick={click} />
+      <Board display={display} handleCellClick={click} gameState={gameState} />
       <Footer />
     </div>
   );

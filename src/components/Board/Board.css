@@ -12,3 +12,7 @@ main {
   display: flex;
   flex-direction: row;
 }
+.gameStatus {
+  color: white;
+  font-size: 3rem;
+}

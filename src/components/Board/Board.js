@@ -1,7 +1,8 @@
 import Cell from "../Cell/Cell";
 import "./Board.css";
+import { WON, LOST } from "../../helpers/Constants";
 
-const Board = ({ display, handleCellClick }) => {
+const Board = ({ display, handleCellClick, gameState }) => {
   return (
     <main>
       {display.map((row, rowIndex) => (
@@ -17,6 +18,8 @@ const Board = ({ display, handleCellClick }) => {
           ))}
         </div>
       ))}
+      {gameState === WON && <p class="gameStatus">YOU WIN!</p>}
+      {gameState === LOST && <p class="gameStatus">YOU LOSE!</p>}
     </main>
   );
 };
