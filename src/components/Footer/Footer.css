@@ -3,6 +3,27 @@ footer {
   padding: 1rem;
   width: 100vw;
   font-family: "Pixel", sans-serif;
-  font-size: 1.2rem;
+  font-size: 20px;
   font-weight: bold;
+  color: var(--americanSilver);
+}
+
+footer a {
+  display: inline-block;
+  background-color: rgb(104, 104, 104);
+  padding: 0 8px;
+  border-radius: 10px;
+  color: var(--americanSilver);
+  text-decoration: none;
+  border: 1px dotted rgb(69, 68, 68);
+}
+
+footer a:hover {
+  background-color: var(--americanSilver);
+  color: rgb(94, 96, 94);
+}
+
+footer span {
+  font-size: 12px;
+  margin-right: 5px;
 }

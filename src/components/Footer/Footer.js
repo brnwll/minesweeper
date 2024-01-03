@@ -4,7 +4,12 @@ import "./Footer.css";
 const Footer = () => {
   return (
     <footer>
-      <p>TODO: Add footer content</p>
+      <p>
+        Created by{" "}
+        <a href="https://github.com/brnwll/minesweeper">
+          <span>💣</span>brnwll
+        </a>
+      </p>
     </footer>
   );
 };
