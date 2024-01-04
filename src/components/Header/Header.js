@@ -22,3 +22,4 @@ const Header = ({ difficultyChange, gameState, bombsRemaining }) => {
 };
 
 export default Header;
+
