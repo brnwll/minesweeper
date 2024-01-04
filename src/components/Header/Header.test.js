@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "./Header";
-import DifficultyForm from "../DifficultyForm/DifficultyForm";
 import { render, screen } from "@testing-library/react";
 import { PLAYING } from "../../helpers/Constants";
 
