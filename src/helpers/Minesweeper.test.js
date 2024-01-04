@@ -5,6 +5,7 @@ import {
   addAdjacentBombCountsTo,
   visitNeighbors,
   traverse,
+  isEmpty,
   outOfBounds,
 } from "./Minesweeper";
 
@@ -104,6 +105,18 @@ describe("Helpers > Minesweeper", () => {
       traverse(board, callback);
       expect(callback).toHaveBeenCalledTimes(25);
       expect(cellsVisited).toEqual(25);
+    });
+  });
+
+  describe("isEmpty", () => {
+    test('should return true if the display is empty, i.e. all cells ""', () => {
+      const board = getBoardOf(5, 5, "");
+      expect(isEmpty(board)).toEqual(true);
+    });
+    test('should return false if the display is not empty, i.e. at least one cell is not ""', () => {
+      const board = getBoardOf(5, 5, "");
+      board[0][0] = "💣";
+      expect(isEmpty(board)).toEqual(false);
     });
   });
 
