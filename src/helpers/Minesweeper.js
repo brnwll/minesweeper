@@ -58,5 +58,13 @@ export const traverse = (board, callback) => {
   }
 };
 
+export const isEmpty = (display) => {
+  let isEmpty = true;
+  traverse(display, (r, c) => {
+    if (display[r][c] !== UNSELECTED) isEmpty = false;
+  });
+  return isEmpty;
+};
+
 export const outOfBounds = (board, row, col) =>
   row < 0 || row >= board.length || col < 0 || col >= board[0].length;

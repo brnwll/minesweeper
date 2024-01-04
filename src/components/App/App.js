@@ -25,6 +25,7 @@ function App() {
   };
 
   const click = (r, c, type) => {
+    if (gameState === NOT_STARTED && !MS.isEmpty(display)) return;
     if (gameState === NOT_STARTED) setGameState(PLAYING);
     if (gameState === LOST || gameState === WON) return;
     if (prevent(type, r, c)) return;
@@ -90,7 +91,12 @@ function App() {
         gameState={gameState}
         bombsRemaining={bombsRemaining}
       />
-      <Board display={display} handleCellClick={click} gameState={gameState} />
+      <Board
+        display={display}
+        handleCellClick={click}
+        gameState={gameState}
+        setGameState={setGameState}
+      />
       <Footer />
     </div>
   );
