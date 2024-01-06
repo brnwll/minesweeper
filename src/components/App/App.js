@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useDifficulty from "../../hooks/useDifficulty";
 import useDisplay from "../../hooks/useDisplay";
 import useBoard from "../../hooks/useBoard";
