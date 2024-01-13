@@ -9,7 +9,7 @@ const Header = ({ difficultyChange, gameState, bombsRemaining }) => {
   return (
     <header>
       <img src={HeaderLogo} alt="Minesweeper" />
-      <h1>Minesweeper</h1>
+      <h1>Minesweepy</h1>
       <DifficultyForm difficultyChange={difficultyChange} />
       <Timer gameState={gameState} />
       {gameState === PLAYING && (
@@ -22,4 +22,3 @@ const Header = ({ difficultyChange, gameState, bombsRemaining }) => {
 };
 
 export default Header;
-
