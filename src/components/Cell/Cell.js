@@ -2,16 +2,6 @@ import "./Cell.css";
 import { BOMB, EMPTY, FLAG } from "../../helpers/Constants";
 
 const Cell = ({ cell, row, col, handleCellClick }) => {
-  const onClick = (e) => {
-    e.preventDefault();
-    handleCellClick(row, col, "left");
-  };
-
-  const rightClick = (e) => {
-    e.preventDefault();
-    handleCellClick(row, col, "right");
-  };
-
   const getClassName = () => {
     let className = "cell";
     switch (cell) {
@@ -54,11 +44,30 @@ const Cell = ({ cell, row, col, handleCellClick }) => {
     return className;
   };
 
+  const onClick = (e) => {
+    e.preventDefault();
+    handleCellClick(row, col, "left");
+  };
+
+  const rightClick = (e) => {
+    e.preventDefault();
+    handleCellClick(row, col, "right");
+  };
+
+  // Touch Screens...
+  // wait half a second before triggering onClick
+  // cancel onClick if onTouchEnd is triggered
+  const onTouchStart = (e) => contextMenuTimer(e);
+  const onTouchEnd = (e) => clearInterval(contextMenuTimer);
+  const contextMenuTimer = (e) => setTimeout(() => rightClick(e), 500);
+
   return (
     <div
       className={getClassName()}
       onClick={onClick}
       onContextMenu={rightClick}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       {cell}
     </div>

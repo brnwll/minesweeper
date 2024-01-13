@@ -41,6 +41,7 @@
   min-height: 100vh;
   font-family: Pixel, Arial, Helvetica, sans-serif;
   font-weight: bold;
+  user-select: none;
 }
 
 main {
